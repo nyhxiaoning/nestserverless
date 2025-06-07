@@ -1,22 +1,23 @@
-import { createServer, proxy } from '@vendia/serverless-express';
-import { Callback, Context, Handler } from 'aws-lambda';
-import { AppModule } from '../src/app.module';
+import createServer from '@codegenie/serverless-express';
 import { NestFactory } from '@nestjs/core';
+import { AppModule } from '../src/app.module';
 
-let server: Handler;
+let server: any;
 
-async function bootstrap(): Promise<Handler> {
+async function bootstrap(): Promise<any> {
     const app = await NestFactory.create(AppModule);
+    debugger
+    app.enableCors({
+        origin: '*', // 或者指定具体域名，如 'http://localhost:5173'
+        credentials: true,
+    });
     await app.init();
     const expressApp = app.getHttpAdapter().getInstance();
     return createServer(expressApp);
 }
 
-export const handler: Handler = async (
-    event: any,
-    context: Context,
-    callback: Callback,
-) => {
+// AWS Lambda handler
+export const handler = async (...args: any) => {
     server = server ?? (await bootstrap());
-    return proxy(server, event, context, 'PROMISE').promise;
+    return server(...args);
 };

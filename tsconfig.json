@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es2017",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
     "baseUrl": ".",
     "rootDir": "."
   },
-  "include": [
-    "src",
-    "api"
-  ]
+  "include": ["src", "api"]
 }
